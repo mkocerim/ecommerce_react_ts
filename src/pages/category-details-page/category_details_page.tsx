@@ -14,13 +14,13 @@ function CategoryDetailsPage(){
     const routeParams = useParams<RouteParamsCode>()
     console.log('>>>ROUTE PARAMS', routeParams)
 
-    const [products,setProducts]=useState<ProductType[]>([])
+    const [products, setProducts]=useState<ProductType[]>([])
     const [initialized,setInitialized]= useState<boolean>(false)
 
     const api= useApi()
     
     if(initialized===false){
-        console.log('COMPONENT INITIALIZED')
+        console.log('COMPONENTCAN NOT INITIALIZED,REQUESTED FROM API')
         const params= {
             'productTaxon.taxon.code':routeParams.category_code
         }
@@ -35,7 +35,7 @@ function CategoryDetailsPage(){
         return(<div>LOADING.... </div>)
 
     }
-    console.log('Prducts BILIGISI ALINDI',products)
+    console.log('PRODUCT INFORMATION RECEIVED ',products)
 
     
     return(

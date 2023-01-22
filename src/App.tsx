@@ -33,14 +33,9 @@ function App() {
       api.get<CategoryType[]>('shop/taxons', {params})
 
       .then((response:AxiosResponse<CategoryType[]>)=>{
-        console.log('>>API RESULT DATA',response)
-        
-        
-
+        console.log('>>API  DATA',response)
         console.log('>>DATA', response.data)
-        
-        
-        
+                
         // dispatch(setCategories(response.data))  
 
         const dispatchData= setCategories(response.data)
@@ -60,8 +55,8 @@ function App() {
     <Header/>
     <Routes>
       <Route index element={<HomePage/>}/>
-      <Route path='/categories-details/:category_code' element={<CategoryDetailsPage/>}/>
-
+      <Route path={'/category-details/:category_code'} element={<CategoryDetailsPage/>}/>
+      
 
 
       </Routes> 

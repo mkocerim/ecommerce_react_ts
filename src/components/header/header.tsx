@@ -87,10 +87,14 @@ function Header() {
               <div id="navigation">
                 <ul>
                   <li className="active">
+
                     <Link to="/">Home</Link>
                   </li>
+
                   {categoryState.initialized === true ? (
+
                     <li className="has-sub">
+
                       <a href="#">Categories</a>
                       <ul>
                         {categoryState.categories.map(
@@ -108,7 +112,9 @@ function Header() {
                     </li>
                   ) : (
                     <li>
-                      <a>Loading</a>
+                      <a>
+                        Loading
+                      </a>
                     </li>
                   )}
 
