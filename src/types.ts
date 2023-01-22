@@ -7,3 +7,29 @@ export type CategoryType = {
     description:string
 
 }
+
+export type ProductImageType={
+    id:number,
+    type:string,
+    path:string,
+}
+
+export type ProductType={
+    id:number,
+    code:string,
+    variants:string[],
+    images:ProductImageType[],
+    
+    averageRating:number,
+
+    productTaxons:string,
+    reviews:string[],
+    options:string[],
+    mainTaxon:string,
+    shortDescription:string,
+    name:string,
+    description:string,
+    slug:string,
+    createdAt:string,
+    updatedAt:string,
+}

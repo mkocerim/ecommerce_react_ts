@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import useApi from "../../hooks/useApi";
 import {useState} from "react"
 import { ProductType } from "../../types";
+import { AxiosResponse } from "axios";
 
 export type RouteParamsCode={
     category_code:string

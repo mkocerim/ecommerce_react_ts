@@ -11,6 +11,7 @@ import { CategoryType } from './types';
 import { useDispatch } from 'react-redux';
 import { setCategories } from './redux/categorySlice';
 import CategoryDetailsPage from './pages/category-details-page/category_details_page';
+import { AxiosResponse } from 'axios';
 
 function App() {
 
@@ -31,9 +32,13 @@ function App() {
     // api.get('/shop/taxons',{params:{page:1, itemsPerPage:30}})
       api.get<CategoryType[]>('shop/taxons', {params})
 
-      .then((response: AxiosResponse<CategoryType[]>)=>{
-        console.log('>>API DATA',response)
-        console.log('>>DATA',response.data)
+      .then((response:AxiosResponse<CategoryType[]>)=>{
+        console.log('>>API RESULT DATA',response)
+        
+        
+
+        console.log('>>DATA', response.data)
+        
         
         
         // dispatch(setCategories(response.data))  
