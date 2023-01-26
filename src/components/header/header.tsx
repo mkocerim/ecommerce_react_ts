@@ -82,8 +82,8 @@ function Header() {
       {/* navigation */}
       <div className="navigation">
         <div className="container">
-          <div className="row">
-            <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div className="row" >
+            <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
               <div id="navigation">
                 <ul>
                   <li className="active">
