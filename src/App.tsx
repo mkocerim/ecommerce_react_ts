@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux';
 import { setCategories } from './redux/categorySlice';
 import CategoryDetailsPage from './pages/category-details-page/category_details_page';
 import { AxiosResponse } from 'axios';
+import ProductDetailsPage from './pages/product-details-page/product_details_page';
 
 function App() {
 
@@ -55,8 +56,10 @@ function App() {
     <Header/>
     <Routes>
       <Route index element={<HomePage/>}/>
-      <Route path={'/category-details/:category_code'} element={<CategoryDetailsPage/>}/>
-      
+      <Route path={'/category-details/:category_code'}   element={<CategoryDetailsPage/>}/>
+      <Route path={'/product-details/:product_code'}   element={<ProductDetailsPage/>}/>
+
+
 
 
       </Routes> 

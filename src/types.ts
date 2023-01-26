@@ -33,3 +33,15 @@ export type ProductType={
     createdAt:string,
     updatedAt:string,
 }
+
+export type ProductVariantType={
+    code:string,
+    id:number,
+    inStock:boolean,
+    name:string,
+    optionValues:any[],
+    originalPrice:number,
+    price:number,
+    product:string
+
+}

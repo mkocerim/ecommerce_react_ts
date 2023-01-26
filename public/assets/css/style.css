@@ -577,25 +577,25 @@ img { width: auto; max-width: 100%; height: auto; margin: 0; padding: 0; border:
 /*-------------------------
  9.2 Product Single
 ---------------------------*/
-#cssmenu, #cssmenu ul, #cssmenu li, #cssmenu a { margin: 0; padding: 0; border: 0; list-style: none; font-weight: normal; text-decoration: none; line-height: 1; font-family: 'Lato', sans-serif; font-size: 14px; position: relative; }
-#cssmenu a { line-height: 1.3; padding: 18px 28px; }
-#cssmenu { margin-bottom: 30px; }
-#cssmenu>ul>li { cursor: pointer; background: #fff; border-bottom: 1px solid #e8eaec; }
-#cssmenu>ul>li:last-child { border-bottom: 1px solid #fff; }
-#cssmenu>ul>li>a { font-size: 13px; display: block; color: #1c1e1e; background: #fff; font-weight: 400; text-transform: uppercase; letter-spacing: 1px; }
-#cssmenu>ul>li>a:hover { text-decoration: none; color: #ff3c2e; }
-#cssmenu>ul>li.active { border-bottom: none; }
-#cssmenu>ul>li.active>a { background: #fff; border-bottom: #e8eaec 2px solid; color: #1c1e1e; }
-#cssmenu>ul>li.has-sub>a:after { content: '\f067'; position: absolute; top: 18px; right: 14px; font-family: 'FontAwesome'; font-size: 12px; color: #848687; }
-#cssmenu>ul>li.has-sub.active>a:after { content: '\f068'; position: absolute; right: 14px; top: 18px; font-family: 'FontAwesome'; color: #848687; font-size: 12px; }
+.cssmenu, .cssmenu ul, .cssmenu li, .cssmenu a { margin: 0; padding: 0; border: 0; list-style: none; font-weight: normal; text-decoration: none; line-height: 1; font-family: 'Lato', sans-serif; font-size: 14px; position: relative; }
+.cssmenu a { line-height: 1.3; padding: 18px 28px; }
+.cssmenu { margin-bottom: 30px; }
+.cssmenu>ul>li { cursor: pointer; background: #fff; border-bottom: 1px solid #e8eaec; }
+.cssmenu>ul>li:last-child { border-bottom: 1px solid #fff; }
+.cssmenu>ul>li>a { font-size: 13px; display: block; color: #1c1e1e; background: #fff; font-weight: 400; text-transform: uppercase; letter-spacing: 1px; }
+.cssmenu>ul>li>a:hover { text-decoration: none; color: #ff3c2e; }
+.cssmenu>ul>li.active { border-bottom: none; }
+.cssmenu>ul>li.active>a { background: #fff; border-bottom: #e8eaec 2px solid; color: #1c1e1e; }
+.cssmenu>ul>li.has-sub>a:after { content: '\f067'; position: absolute; top: 18px; right: 14px; font-family: 'FontAwesome'; font-size: 12px; color: #848687; }
+.cssmenu>ul>li.has-sub.active>a:after { content: '\f068'; position: absolute; right: 14px; top: 18px; font-family: 'FontAwesome'; color: #848687; font-size: 12px; }
 
 /* Sub menu */
-#cssmenu ul ul { padding: 0; display: none; margin-top: 15px; }
-#cssmenu ul ul a { background: #fff; display: block; color: #848687; font-size: 14px; text-transform: capitalize; font-weight: 700; padding: 6px 0px; }
-#cssmenu ul ul a:hover { color: #ff3c2e; }
-#cssmenu ul ul li { border-bottom: 0px; padding-left: 30px; font-size: 14px; font-weight: 700; padding-bottom: 10px; }
+.cssmenu ul ul { padding: 0; display: none; margin-top: 15px; }
+.cssmenu ul ul a { background: #fff; display: block; color: #848687; font-size: 14px; text-transform: capitalize; font-weight: 700; padding: 6px 0px; }
+.cssmenu ul ul a:hover { color: #ff3c2e; }
+.cssmenu ul ul li { border-bottom: 0px; padding-left: 30px; font-size: 14px; font-weight: 700; padding-bottom: 10px; }
 .checkbox-list { display: inline-block; padding-left: 5px; position: relative; bottom: 2px; }
-#cssmenu ul ul li:last-child { border: none; }
+.cssmenu ul ul li:last-child { border: none; }
 .thumb-img img { border: 1px solid #c8cbcf; height: 80px; width: 80px; margin-bottom: 10px; padding: 13px 8px; }
 .thumb-img img:hover { border: 1px solid #fb730f; }
 .product-single { }
