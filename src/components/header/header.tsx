@@ -1,12 +1,16 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { CartStateType } from "../../redux/cartSlice";
+import { CategoryStateType } from "../../redux/categorySlice";
 import { RootStateType } from "../../redux/store";
 import { CategoryType } from "../../types";
 
 function Header() {
-  const categoryState = useSelector((state: RootStateType) => {
-    return state.category;
-  });
+  const cartState:CartStateType=useSelector((state:RootStateType)=>state.cart)
+
+  const categoryState:CategoryStateType = useSelector((state: RootStateType) => state.category);
+
+
   return (
     <div>
       {/* Top Header */}
@@ -56,20 +60,24 @@ function Header() {
               <div className="account-section">
                 <ul>
                   <li>
-                    <a href="#" className="title hidden-xs">
+                    <a href="#" 
+                    className="title hidden-xs">
                       My Account
                     </a>
                   </li>
                   <li className="hidden-xs">|</li>
                   <li>
-                    <a href="#" className="title hidden-xs">
+                    <a href="#" 
+                    className="title hidden-xs">
                       Register
                     </a>
                   </li>
                   <li>
                     <a href="#" className="title">
                       <i className="fa fa-shopping-cart"></i>{" "}
-                      <sup className="cart-quantity">1</sup>
+                      <sup className="cart-quantity">
+                        {cartState.cart?.items.length}
+                      </sup>
                     </a>
                   </li>
                 </ul>

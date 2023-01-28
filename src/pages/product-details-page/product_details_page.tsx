@@ -4,12 +4,16 @@ import Breadcrumb, {
 } from "../../components/breadcrumb/breadcrumb";
 
 import { useState } from "react";
-import { ProductImageType, ProductType, ProductVariantType } from "../../types";
+import { CartType, ProductImageType, ProductType, ProductVariantType } from "../../types";
 
 import styles from "./product_details.module.css";
 import useApi from "../../hooks/useApi";
 import { AxiosResponse } from "axios";
 import ImageGallery, { ReactImageGalleryItem } from "react-image-gallery";
+import { useDispatch } from "react-redux";
+import { CartStateType, setCart } from "../../redux/cartSlice";
+import { useSelector } from "react-redux";
+import { RootStateType } from "../../redux/store";
 
 export type RouteParamsType = {
   product_code: string;
@@ -17,12 +21,38 @@ export type RouteParamsType = {
 
 export default function ProductDetailsPage() {
   const routeParams = useParams<RouteParamsType>();
+  const cartState:CartStateType=useSelector((state:RootStateType)=>state.cart)
 
   const api = useApi();
 
   const [product, setProduct] = useState<ProductType | null>(null);
   const [variants, setVariants] = useState<ProductVariantType[]>([]);
   const [initialized, setInitialized] = useState<boolean>(false);
+
+  const dispatch=useDispatch()
+
+  function onFormSubmit(event:any){
+    event.preventDefault()
+
+    const formData = new FormData(event.target)
+    const formValues:any= Object.fromEntries(formData.entries())
+    formValues.quantity=parseInt(formValues.quantity)
+
+    console.log('>>FORM VALUE', formValues)
+
+    const tokenValue=cartState.cart?.tokenValue
+
+    api.post<CartType>(`shop/orders/${tokenValue}/items`,formValues)
+    .then((response:AxiosResponse<CartType>)=>{
+
+      console.log('>>>ADD ITEM CART RESP',response)
+    
+    dispatch(setCart(response.data))
+
+
+    })
+
+  }
 
   //bu bölge senkron
 
@@ -57,32 +87,35 @@ setInitialized(true)
       //variantları 2 şekilde alabiliriz
       //birincisi for döngüsü  verimsiz bir yöntem
 
-    //   for (let i = 0; i < productResponse.data.variants.length; i++) {
-    //     let variant = productResponse.data.variants[i];
-    //     variant = variant.substring("/api/v2/".length);
+      //   for (let i = 0; i < productResponse.data.variants.length; i++) {
+      //     let variant = productResponse.data.variants[i];
+      //     variant = variant.substring("/api/v2/".length);
 
-    //     let variantResponse = await api.get<ProductVariantType>(variant);
+      //     let variantResponse = await api.get<ProductVariantType>(variant);
 
-    //     console.log(">>VARIANT RESPONSE RESP DATA", variantResponse.data);
-    //   }
+      //     console.log(">>VARIANT RESPONSE RESP DATA", variantResponse.data);
+      //   }
 
-    let promises: Promise<any>[]=[]
+      let promises: Promise<any>[] = [];
 
-    //promise.all dizi döndürür. tüm verileri önce bir diziye atarız sonra o diziyi promise.al atadıgımızda hepsine bir seferde istek atar
-    
-    promises=productResponse.data.variants.map((variant:string)=>{
+      //promise.all dizi döndürür. tüm verileri önce bir diziye atarız sonra o diziyi promise.al atadıgımızda hepsine bir seferde istek atar
 
-        variant= variant.substring('/api/v2/'.length)
-        return api.get<ProductVariantType>(variant)
-    })
+      promises = productResponse.data.variants.map((variant: string) => {
+        variant = variant.substring("/api/v2/".length);
+        return api.get<ProductVariantType>(variant);
+      });
 
-    let promiseValue:AxiosResponse<ProductVariantType>[] = await Promise.all(promises)
+      let promiseValue: AxiosResponse<ProductVariantType>[] = await Promise.all(
+        promises
+      );
 
-    console.log('PROMISE VALUE',promiseValue)
+      console.log("PROMISE VALUE", promiseValue);
 
-    setVariants(promiseValue.map((item:AxiosResponse<ProductVariantType>)=>item.data))
+      setProduct(productResponse.data);
+      setVariants(
+        promiseValue.map((item: AxiosResponse<ProductVariantType>) => item.data)
+      );
 
-    
       setInitialized(true);
     })();
 
@@ -113,9 +146,8 @@ setInitialized(true)
     );
   }
 
-  console.log('>>VARIANTS', variants)
-  console.log('>>PRODUCT', product)
-
+  console.log(">>VARIANTS", variants);
+  console.log(">>PRODUCT", product);
 
   //örnek ürün variant bilgisi
   //
@@ -182,27 +214,61 @@ setInitialized(true)
                           <span className={styles.old_price}> $1300</span>
                         </p>
                         <p>{product?.shortDescription}</p>
-                        <div className="product-quantity">
-                          <h5>Quantity</h5>
-                          <div className="quantity mb20">
-                            <input
-                              type="number"
-                              className="input-text qty text"
-                              step={1}
-                              min={1}
-                              max={6}
-                              name="quantity"
-                              defaultValue={1}
-                              title="Qty"
-                              size={4}
-                              pattern="[0-9]*"
-                            />
+
+                        <form onSubmit={onFormSubmit}>
+
+
+                        <div className="row">
+                          <div className="col-lg-2 col-md-6 col-sm-6 col-xs-6">
+                            <div className="product-quantity">
+                              <h5>Quantity</h5>
+                              <div className="quantity mb20">
+                                <input
+                                  type="number"
+                                  className="input-text qty text"
+                                  step={1}
+                                  min={1}
+                                  max={6}
+                                  name="quantity"
+                                  defaultValue={1}
+                                  title="Qty"
+                                  size={4}
+                                  pattern="[0-9]*"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-lg-3 col-md-6 col-sm-6 col-xs-6">
+                            <div className="product-quantity">
+                              <h5>Variants</h5>
+                              <div className="quantity mb20">
+                                <select 
+                                className="input-text full-width"
+                                name={'productVariant'}
+                                >
+                                  {variants.map(
+                                    (variant: ProductVariantType, index) => {
+                                      return (
+                                        <option
+                                          value={variant.code}
+                                          key={index}
+                                        >
+                                          {variant.name}
+                                        </option>
+                                      );
+                                    }
+                                  )}
+                                </select>
+                              </div>
+                            </div>
                           </div>
                         </div>
+
                         <button type="submit" className="btn btn-default">
                           <i className="fa fa-shopping-cart" />
                           &nbsp;Add to cart
                         </button>
+                    </form>
                       </div>
                     </div>
                   </div>
