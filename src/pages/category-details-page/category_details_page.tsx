@@ -6,7 +6,7 @@ import { AxiosResponse } from "axios";
 import Breadcrumb, {
   BreadcrumbItemType,
 } from "../../components/breadcrumb/breadcrumb";
-import ProductItem from "./components/product-item/product.item";
+import ProductItem from "./components/product-item/product_item";
 
 export type RouteParamsCode = {
   category_code: string;
@@ -30,9 +30,9 @@ function CategoryDetailsPage() {
 
   useEffect(() => {
     setProducts([]);
-    setPage(1)
-    setOrderByCreatedAt('asc')
-    setOrderByPrice('asc')
+    setPage(1);
+    setOrderByCreatedAt("asc");
+    setOrderByPrice("asc");
     setInitialized(false);
   }, [routeParams.category_code]);
 
@@ -184,9 +184,9 @@ function CategoryDetailsPage() {
                       <li className="active">
                         <a>{page}</a>
                       </li>
-                      {products.length ===0                      ? 
-                      (<></>) 
-                      : (
+                      {products.length === 0 ? (
+                        <></>
+                      ) : (
                         <li>
                           <a
                             onClick={() => {

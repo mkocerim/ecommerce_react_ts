@@ -1,9 +1,8 @@
 import { AxiosResponse } from "axios";
-import { iteratorSymbol } from "immer/dist/internal";
-import { ChangeEvent } from "react";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { ChangeEvent, useContext } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { AppLoodingContext } from "../../components/app-loading/app_loading";
 import Breadcrumb, {
   BreadcrumbItemType,
 } from "../../components/breadcrumb/breadcrumb";
@@ -14,7 +13,7 @@ import { CartItemType, CartType } from "../../types";
 
 export default function CartPage() {
   const cartState = useSelector((state: RootStateType) => state.cart);
-
+  const appLoadingContextData = useContext(AppLoodingContext);
   const api = useApi();
   const dispatch = useDispatch();
 
@@ -59,6 +58,16 @@ export default function CartPage() {
   return (
     <>
       <Breadcrumb items={breadcrumbItems} />
+
+      <button
+        type="button"
+        className="btn btn-primary"
+        onClick={() => {
+          appLoadingContextData.setLoading(true);
+        }}
+      >
+        BUTTON
+      </button>
 
       <div className="space-medium">
         <div className="container">

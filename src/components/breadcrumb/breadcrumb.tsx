@@ -20,22 +20,14 @@ export default function Breadcrumb(props: BreadcrumbPropsType) {
                 {props.items.map((item: BreadcrumbItemType, index: number) => {
                   if (index < props.items.length - 1) {
                     return (
-                      <li>
-                        <Link to={item.url as string}>
-                          {item.title}
-                          </Link>
+                      <li key={index}>
+                        <Link to={item.url as string}>{item.title}</Link>
                       </li>
                     );
-                  }else{
-                    return(
-                      <li>{item.title}</li>
-
-                    )
-
+                  } else {
+                    return <li key={index}>{item.title}</li>;
                   }
                 })}
-
-             
               </ol>
             </div>
           </div>

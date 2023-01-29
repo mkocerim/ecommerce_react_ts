@@ -1,23 +1,24 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-import '@splidejs/splide/css';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import "@splidejs/splide/css";
 
-import 'react-image-gallery/styles/css/image-gallery.css'
+import "react-image-gallery/styles/css/image-gallery.css";
 
-import { Provider } from 'react-redux';
-import store from './redux/store'
-
-
+import { Provider } from "react-redux";
+import store from "./redux/store";
+import AppLooding from "./components/app-loading/app_loading";
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-   <Provider store={store}>
-   <App />
-   </Provider>
+    <Provider store={store}>
+      <AppLooding>
+        <App />
+      </AppLooding>
+    </Provider>
   </React.StrictMode>
 );
 

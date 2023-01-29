@@ -19,7 +19,7 @@ import { useDispatch } from "react-redux";
 import { CartStateType, setCart } from "../../redux/cartSlice";
 import { useSelector } from "react-redux";
 import { RootStateType } from "../../redux/store";
-import ProductPrice from "../category-details-page/components/product-item/product-price/product.price";
+import ProductPrice from "../category-details-page/components/product-item/product-price/product_price";
 
 export type RouteParamsType = {
   product_code: string;

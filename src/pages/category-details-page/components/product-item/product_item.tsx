@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import useApi from "../../../../hooks/useApi";
 import { ProductType, ProductVariantType } from "../../../../types";
-import ProductPrice from "./product-price/product.price";
+import ProductPrice from "./product-price/product_price";
 
 export type ProductItemPropsType = {
   productDetails: ProductType;
@@ -39,12 +39,11 @@ export default function ProductItem(props: ProductItemPropsType) {
       </div>
       <div className="product-content">
         <h5>
-          <Link to={"/product-details/" + props.productDetails.code}
+          <Link
+            to={"/product-details/" + props.productDetails.code}
             className="product-title"
           >
-            <strong>
-                {props.productDetails.name}
-            </strong>
+            <strong>{props.productDetails.name}</strong>
           </Link>
         </h5>
         <div className="product-meta">
