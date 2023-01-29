@@ -3,8 +3,13 @@ import Breadcrumb, {
   BreadcrumbItemType,
 } from "../../components/breadcrumb/breadcrumb";
 
-import { useState } from "react";
-import { CartType, ProductImageType, ProductType, ProductVariantType } from "../../types";
+import { ChangeEvent, useState } from "react";
+import {
+  CartType,
+  ProductImageType,
+  ProductType,
+  ProductVariantType,
+} from "../../types";
 
 import styles from "./product_details.module.css";
 import useApi from "../../hooks/useApi";
@@ -14,6 +19,7 @@ import { useDispatch } from "react-redux";
 import { CartStateType, setCart } from "../../redux/cartSlice";
 import { useSelector } from "react-redux";
 import { RootStateType } from "../../redux/store";
+import ProductPrice from "../category-details-page/components/product-item/product-price/product.price";
 
 export type RouteParamsType = {
   product_code: string;
@@ -21,7 +27,9 @@ export type RouteParamsType = {
 
 export default function ProductDetailsPage() {
   const routeParams = useParams<RouteParamsType>();
-  const cartState:CartStateType=useSelector((state:RootStateType)=>state.cart)
+  const cartState: CartStateType = useSelector(
+    (state: RootStateType) => state.cart
+  );
 
   const api = useApi();
 
@@ -29,29 +37,33 @@ export default function ProductDetailsPage() {
   const [variants, setVariants] = useState<ProductVariantType[]>([]);
   const [initialized, setInitialized] = useState<boolean>(false);
 
-  const dispatch=useDispatch()
+  //baska bir state baglı state, variant state degiştikce bu state de degişikliğe ugrar
+  // const [selectedVariant, setSelectedVariant] =useState<ProductVariantType | null>(null);
 
-  function onFormSubmit(event:any){
-    event.preventDefault()
+  const [selectedVariantCode, setSelectedVariantCode] = useState<string | null>(
+    null
+  );
 
-    const formData = new FormData(event.target)
-    const formValues:any= Object.fromEntries(formData.entries())
-    formValues.quantity=parseInt(formValues.quantity)
+  const dispatch = useDispatch();
 
-    console.log('>>FORM VALUE', formValues)
+  function onFormSubmit(event: any) {
+    event.preventDefault();
 
-    const tokenValue=cartState.cart?.tokenValue
+    const formData = new FormData(event.target);
+    const formValues: any = Object.fromEntries(formData.entries());
+    formValues.quantity = parseInt(formValues.quantity);
 
-    api.post<CartType>(`shop/orders/${tokenValue}/items`,formValues)
-    .then((response:AxiosResponse<CartType>)=>{
+    console.log(">>FORM VALUE", formValues);
 
-      console.log('>>>ADD ITEM CART RESP',response)
-    
-    dispatch(setCart(response.data))
+    const tokenValue = cartState.cart?.tokenValue;
 
+    api
+      .post<CartType>(`shop/orders/${tokenValue}/items`, formValues)
+      .then((response: AxiosResponse<CartType>) => {
+        console.log(">>>ADD ITEM CART RESP", response);
 
-    })
-
+        dispatch(setCart(response.data));
+      });
   }
 
   //bu bölge senkron
@@ -111,10 +123,15 @@ setInitialized(true)
 
       console.log("PROMISE VALUE", promiseValue);
 
-      setProduct(productResponse.data);
-      setVariants(
-        promiseValue.map((item: AxiosResponse<ProductVariantType>) => item.data)
+      const apiVariants: ProductVariantType[] = promiseValue.map(
+        (item: AxiosResponse<ProductVariantType>) => item.data
       );
+
+      console.log(">>>API VARIANTS", apiVariants);
+
+      setProduct(productResponse.data);
+      setVariants(apiVariants);
+      setSelectedVariantCode(apiVariants[0].code);
 
       setInitialized(true);
     })();
@@ -145,6 +162,10 @@ setInitialized(true)
       </>
     );
   }
+
+  const selectedVariant: ProductVariantType | undefined = variants.find(
+    (item: ProductVariantType) => item.code === selectedVariantCode
+  );
 
   console.log(">>VARIANTS", variants);
   console.log(">>PRODUCT", product);
@@ -210,65 +231,73 @@ setInitialized(true)
                           </span>
                         </div>
                         <p className={"product-price " + styles.product_price}>
-                          $1100 &nbsp;
-                          <span className={styles.old_price}> $1300</span>
+                          <ProductPrice
+                            variant={selectedVariant as ProductVariantType}
+                          />
                         </p>
                         <p>{product?.shortDescription}</p>
 
                         <form onSubmit={onFormSubmit}>
-
-
-                        <div className="row">
-                          <div className="col-lg-2 col-md-6 col-sm-6 col-xs-6">
-                            <div className="product-quantity">
-                              <h5>Quantity</h5>
-                              <div className="quantity mb20">
-                                <input
-                                  type="number"
-                                  className="input-text qty text"
-                                  step={1}
-                                  min={1}
-                                  max={6}
-                                  name="quantity"
-                                  defaultValue={1}
-                                  title="Qty"
-                                  size={4}
-                                  pattern="[0-9]*"
-                                />
+                          <div className="row">
+                            <div className="col-lg-2 col-md-6 col-sm-6 col-xs-6">
+                              <div className="product-quantity">
+                                <h5>Quantity</h5>
+                                <div className="quantity mb20">
+                                  <input
+                                    type="number"
+                                    className="input-text qty text"
+                                    step={1}
+                                    min={1}
+                                    max={6}
+                                    name="quantity"
+                                    defaultValue={1}
+                                    title="Qty"
+                                    size={4}
+                                    pattern="[0-9]*"
+                                  />
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          <div className="col-lg-3 col-md-6 col-sm-6 col-xs-6">
-                            <div className="product-quantity">
-                              <h5>Variants</h5>
-                              <div className="quantity mb20">
-                                <select 
-                                className="input-text full-width"
-                                name={'productVariant'}
-                                >
-                                  {variants.map(
-                                    (variant: ProductVariantType, index) => {
-                                      return (
-                                        <option
-                                          value={variant.code}
-                                          key={index}
-                                        >
-                                          {variant.name}
-                                        </option>
+                            <div className="col-lg-3 col-md-6 col-sm-6 col-xs-6">
+                              <div className="product-quantity">
+                                <h5>Variants</h5>
+                                <div className="quantity mb20">
+                                  <select
+                                    className="input-text full-width"
+                                    name={"productVariant"}
+                                    onChange={(
+                                      event: ChangeEvent<HTMLSelectElement>
+                                    ) => {
+                                      setSelectedVariantCode(
+                                        event.target.value as string
                                       );
-                                    }
-                                  )}
-                                </select>
+                                    }}
+                                  >
+                                    {variants.map(
+                                      (variant: ProductVariantType, index) => {
+                                        return (
+                                          <option
+                                            value={variant.code}
+                                            key={index}
+                                          >
+                                            {variant.name
+                                              ? variant.name
+                                              : variant.code}
+                                          </option>
+                                        );
+                                      }
+                                    )}
+                                  </select>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
 
-                        <button type="submit" className="btn btn-default">
-                          <i className="fa fa-shopping-cart" />
-                          &nbsp;Add to cart
-                        </button>
-                    </form>
+                          <button type="submit" className="btn btn-default">
+                            <i className="fa fa-shopping-cart" />
+                            &nbsp;Add to cart
+                          </button>
+                        </form>
                       </div>
                     </div>
                   </div>
