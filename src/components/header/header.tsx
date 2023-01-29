@@ -6,10 +6,13 @@ import { RootStateType } from "../../redux/store";
 import { CategoryType } from "../../types";
 
 function Header() {
-  const cartState:CartStateType=useSelector((state:RootStateType)=>state.cart)
+  const cartState: CartStateType = useSelector(
+    (state: RootStateType) => state.cart
+  );
 
-  const categoryState:CategoryStateType = useSelector((state: RootStateType) => state.category);
-
+  const categoryState: CategoryStateType = useSelector(
+    (state: RootStateType) => state.category
+  );
 
   return (
     <div>
@@ -60,25 +63,23 @@ function Header() {
               <div className="account-section">
                 <ul>
                   <li>
-                    <a href="#" 
-                    className="title hidden-xs">
+                    <a href="#" className="title hidden-xs">
                       My Account
                     </a>
                   </li>
                   <li className="hidden-xs">|</li>
                   <li>
-                    <a href="#" 
-                    className="title hidden-xs">
+                    <a href="#" className="title hidden-xs">
                       Register
                     </a>
                   </li>
                   <li>
-                    <a href="#" className="title">
+                    <Link to={"/cart"} className="title">
                       <i className="fa fa-shopping-cart"></i>{" "}
                       <sup className="cart-quantity">
                         {cartState.cart?.items.length}
                       </sup>
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
@@ -90,19 +91,16 @@ function Header() {
       {/* navigation */}
       <div className="navigation">
         <div className="container">
-          <div className="row" >
-            <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+          <div className="row">
+            <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
               <div id="navigation">
                 <ul>
                   <li className="active">
-
                     <Link to="/">Home</Link>
                   </li>
 
                   {categoryState.initialized === true ? (
-
                     <li className="has-sub">
-
                       <a href="#">Categories</a>
                       <ul>
                         {categoryState.categories.map(
@@ -120,9 +118,7 @@ function Header() {
                     </li>
                   ) : (
                     <li>
-                      <a>
-                        Loading
-                      </a>
+                      <a>Loading</a>
                     </li>
                   )}
 
