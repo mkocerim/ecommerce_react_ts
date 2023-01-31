@@ -1,5 +1,7 @@
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { AuthStateType, logout } from "../../redux/authSlice";
 import { CartStateType } from "../../redux/cartSlice";
 import { CategoryStateType } from "../../redux/categorySlice";
 import { RootStateType } from "../../redux/store";
@@ -13,6 +15,10 @@ function Header() {
   const categoryState: CategoryStateType = useSelector(
     (state: RootStateType) => state.category
   );
+  const authState: AuthStateType = useSelector(
+    (state: RootStateType) => state.auth
+  );
+  const dispatch = useDispatch();
 
   return (
     <div>
@@ -37,7 +43,7 @@ function Header() {
         </div>
       </div>
       {/* Header */}
-      <div className="header-wrapper">
+      <div>
         <div className="container">
           <div className="row">
             <div className="col-lg-3 col-md-3 col-sm-3 col-xs-8">
@@ -47,7 +53,7 @@ function Header() {
                 </Link>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div className="col-lg-5 col-md-6 col-sm-6 col-xs-12">
               <div className="search-bg">
                 <input
                   type="text"
@@ -59,20 +65,46 @@ function Header() {
                 </button>
               </div>
             </div>
-            <div className="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+
+            <div className="col-lg-4 col-md-3 col-sm-3 col-xs-12">
               <div className="account-section">
                 <ul>
-                  <li>
-                    <a href="#" className="title hidden-xs">
-                      My Account
-                    </a>
-                  </li>
-                  <li className="hidden-xs">|</li>
-                  <li>
-                    <a href="#" className="title hidden-xs">
-                      Register
-                    </a>
-                  </li>
+                  {authState.token ? (
+                    <>
+                      <li>
+                        <Link to={"/user"} className="title hidden-xs">
+                          {authState.email}
+                        </Link>
+                      </li>
+
+                      <li className="hidden-xs">|</li>
+                      <li>
+                        <a
+                          className="title hidden-xs"
+                          onClick={() => {
+                            dispatch(logout());
+                          }}
+                        >
+                          Logout
+                        </a>
+                      </li>
+                    </>
+                  ) : (
+                    <>
+                      <li>
+                        <Link to={"auth/login"} className="title hidden-xs">
+                          Login
+                        </Link>
+                      </li>
+                      <li className="hidden-xs">|</li>
+                      <li>
+                        <Link to={"auth/register"} className="title hidden-xs">
+                          Register
+                        </Link>
+                      </li>
+                    </>
+                  )}
+
                   <li>
                     <Link to={"/cart"} className="title">
                       <i className="fa fa-shopping-cart"></i>{" "}
@@ -135,7 +167,7 @@ function Header() {
                         <a href="cart.html">Cart</a>{" "}
                       </li>
                       <li>
-                        <a href="login-form.html">Login</a>{" "}
+                        <a href="#">Login</a>{" "}
                       </li>
                       <li>
                         <a href="signup-form.html">Signup</a>{" "}

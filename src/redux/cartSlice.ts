@@ -1,41 +1,38 @@
-import { createSlice,PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CartType } from "../types";
 
-export type CartStateType={
-    cart:CartType | null,
-    initialized:boolean
-}
+export type CartStateType = {
+  cart: CartType | null;
+  initialized: boolean;
+};
 
-const initialState: CartStateType={
-    cart:null,
-    initialized:false
-}
+const initialState: CartStateType = {
+  cart: null,
+  initialized: false,
+};
 
-export const cartSlice=createSlice({
-    name:'cartSlice',
-    initialState,
-    reducers:{
+export const cartSlice = createSlice({
+  name: "cartSlice",
+  initialState,
+  reducers: {
+    setCart: (state: CartStateType, action: PayloadAction<CartType>) => {
+      console.log(">>SETCART ACTION", action);
 
-        setCart:(state:CartStateType, action: PayloadAction<CartType>)=>{
+      localStorage.setItem("cartToken", action.payload.tokenValue);
+      state.cart = action.payload;
+      state.initialized = true;
+    },
+    refreshCart: (state: CartStateType) => {
+      state.initialized = false;
+    },
+    removeCart: (state: CartStateType) => {
+      localStorage.removeItem("cartToken");
+      state.cart = null;
+      state.initialized = false;
+    },
+  },
+});
 
-        console.log('>>SETCART ACTION',action)
+export default cartSlice.reducer;
 
-        localStorage.setItem('cartToken', action.payload.tokenValue)
-        state.cart = action.payload
-        state.initialized=true
-        },
-        removeCart:(state:CartStateType)=>{
-            localStorage.removeItem('cartToken')
-            state.cart=null
-            state.initialized=false
-
-        }
-    }
-})
-
-
-
-
-export default cartSlice.reducer
-
-export const {setCart,removeCart} =cartSlice.actions
+export const { setCart, removeCart, refreshCart } = cartSlice.actions;

@@ -7,7 +7,7 @@ import Breadcrumb, {
   BreadcrumbItemType,
 } from "../../components/breadcrumb/breadcrumb";
 import useApi from "../../hooks/useApi";
-import { setCart } from "../../redux/cartSlice";
+import { refreshCart, setCart } from "../../redux/cartSlice";
 import { RootStateType } from "../../redux/store";
 import { CartItemType, CartType } from "../../types";
 
@@ -31,8 +31,24 @@ export default function CartPage() {
     0
   );
 
+  function handleItemDelete(item: CartItemType) {
+    console.log("HANDLE ITEM DELETE CALLED");
+
+    appLoadingContextData.setLoading(true);
+
+    api
+      .delete(`shop/orders/${cartState.cart?.tokenValue}/items/${item.id}`)
+      .then(() => {
+        appLoadingContextData.setLoading(false);
+        dispatch(refreshCart());
+      });
+  }
+
   function handleQuantityChange(item: CartItemType, quantity: number) {
     console.log("HANDLE QUANTITY CHANGE CALL");
+
+    appLoadingContextData.setLoading(true);
+
     const patchData = { quantity };
     api
       .patch<CartType>(
@@ -47,6 +63,8 @@ export default function CartPage() {
       .then((response: AxiosResponse<CartType>) => {
         console.log(">>>CART PATCH RESP", response);
         dispatch(setCart(response.data));
+
+        appLoadingContextData.setLoading(false);
       });
   }
 
@@ -58,16 +76,6 @@ export default function CartPage() {
   return (
     <>
       <Breadcrumb items={breadcrumbItems} />
-
-      <button
-        type="button"
-        className="btn btn-primary"
-        onClick={() => {
-          appLoadingContextData.setLoading(true);
-        }}
-      >
-        BUTTON
-      </button>
 
       <div className="space-medium">
         <div className="container">
@@ -145,7 +153,12 @@ export default function CartPage() {
                                   </td>
                                   <td>${item.total}</td>
                                   <th scope="row">
-                                    <a href="#" className="btn-close">
+                                    <a
+                                      onClick={() => {
+                                        handleItemDelete(item);
+                                      }}
+                                      className="btn-close"
+                                    >
                                       <i className="fa fa-times-circle-o" />
                                     </a>
                                   </th>
@@ -212,33 +225,6 @@ export default function CartPage() {
                   </div>
                 </div>
               </div>
-              {/* coupon-section */}
-              <div className="box mb30">
-                <div className="box-head">
-                  <h3 className="head-title">Coupons &amp; Offers</h3>
-                </div>
-                <div className="box-body">
-                  <form>
-                    <div className="coupon-form">
-                      <input
-                        type="text"
-                        name="coupon_code"
-                        className="form-control"
-                        id="coupon_code"
-                        defaultValue={1}
-                        placeholder="Coupon code"
-                      />
-                      <input
-                        type="submit"
-                        className="btn btn-primary btn-block"
-                        name="apply_coupon"
-                        defaultValue="Apply coupon"
-                      />
-                    </div>
-                  </form>
-                </div>
-              </div>
-              {/* /.coupon-section */}
             </div>
           </div>
           {/* /.cart-total */}

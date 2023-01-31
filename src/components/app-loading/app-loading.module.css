@@ -10,6 +10,6 @@
 
 .app_loading > img {
   display: flex;
-  margin: 200px auto;
+  margin: auto auto;
   width: 100px;
 }

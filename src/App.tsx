@@ -15,16 +15,22 @@ import { AxiosResponse } from "axios";
 import ProductDetailsPage from "./pages/product-details-page/product_details_page";
 import { setCart } from "./redux/cartSlice";
 import CartPage from "./pages/cart-page/cart";
+import LoginPage from "./pages/login-page/login_page";
+import RegisterPage from "./pages/register-page/register_page";
 
 function App() {
   const authState = useSelector((state: RootStateType) => {
     return state.auth;
   });
+
   const dispatch = useDispatch();
   const api = useApi();
 
   const categoryState = useSelector((state: RootStateType) => state.category);
+
   console.log("CAT STATE", categoryState);
+
+  const cartState = useSelector((state: RootStateType) => state.cart);
 
   if (categoryState.initialized === false) {
     const params = { page: 1, itemsPerPage: 30 };
@@ -44,21 +50,24 @@ function App() {
       });
   }
 
-  const cartToken = localStorage.getItem("cartToken");
+  if (cartState.initialized === false) {
+    const cartToken = localStorage.getItem("cartToken");
 
-  if (cartToken) {
-    api
-      .get<CartType>("shop/orders/" + cartToken)
-      .then((response: AxiosResponse<CartType>) => {
-        dispatch(setCart(response.data));
-      });
-  } else {
-    const postData = { localeCode: "en_US" };
-    api
-      .post<CartType>("shop/orders", postData)
-      .then((response: AxiosResponse<CartType>) => {
-        dispatch(setCart(response.data));
-      });
+    if (cartToken) {
+      api
+
+        .get<CartType>("shop/orders/" + cartToken)
+        .then((response: AxiosResponse<CartType>) => {
+          dispatch(setCart(response.data));
+        });
+    } else {
+      const postData = { localeCode: "en_US" };
+      api
+        .post<CartType>("shop/orders", postData)
+        .then((response: AxiosResponse<CartType>) => {
+          dispatch(setCart(response.data));
+        });
+    }
   }
 
   return (
@@ -76,6 +85,8 @@ function App() {
             element={<ProductDetailsPage />}
           />
           <Route path={"/cart"} element={<CartPage />} />
+          <Route path={"/auth/login"} element={<LoginPage />} />
+          <Route path={"/auth/register"} element={<RegisterPage />} />
         </Routes>
 
         <Footer />
