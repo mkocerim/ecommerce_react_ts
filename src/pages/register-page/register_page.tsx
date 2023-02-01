@@ -1,13 +1,47 @@
+import { AxiosResponse } from "axios";
+import { FormEvent, useContext } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { AppLoodingContext } from "../../components/app-loading/app_loading";
 import Breadcrumb, {
   BreadcrumbItemType,
 } from "../../components/breadcrumb/breadcrumb";
+import useApi from "../../hooks/useApi";
 
 export default function RegisterPage() {
+  const appLoadingContextData = useContext(AppLoodingContext);
+
   const breadcrumbItems: BreadcrumbItemType[] = [
     { title: "Home", url: "/" },
     { title: "Register" },
   ];
+  const api = useApi();
+  const dispatch = useDispatch();
+
+  function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.target as HTMLFormElement);
+    const formValues: any = Object.fromEntries(formData.entries());
+    console.log("FORM VALUE", formValues);
+    formValues.subscribedToNewsletter = formValues.subscribedToNewsletter
+      ? true
+      : false;
+    appLoadingContextData.setLoading(true);
+    api
+      .post("shop/customers", formValues)
+      .then((response: AxiosResponse<any>) => {
+        console.log(">>>REGISTER FORMVALUE RESP", response);
+      })
+      .catch(() => {
+        //alert("an Error accured");
+      })
+      .finally(() => {
+        setTimeout(() => {
+          document.location.href = "/auth/login";
+        }, 10);
+        appLoadingContextData.setLoading(false);
+      });
+  }
 
   return (
     <>
@@ -25,7 +59,7 @@ export default function RegisterPage() {
                       <h3 className="mb10">Login</h3>
                     </div>
                     {/* form */}
-                    <form>
+                    <form onSubmit={onSubmit}>
                       <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div className="form-group">
                           <label
@@ -46,6 +80,7 @@ export default function RegisterPage() {
                           </div>
                         </div>
                       </div>
+
                       <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div className="form-group">
                           <label
@@ -66,6 +101,7 @@ export default function RegisterPage() {
                           </div>
                         </div>
                       </div>
+
                       <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div className="form-group">
                           <label
@@ -87,6 +123,7 @@ export default function RegisterPage() {
                           </div>
                         </div>
                       </div>
+
                       <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div className="form-group">
                           <label className="control-label sr-only" />
@@ -98,6 +135,7 @@ export default function RegisterPage() {
                               placeholder="******"
                               required
                             />
+
                             <div className="login-icon">
                               <i className="fa fa-lock" />
                             </div>
@@ -107,6 +145,21 @@ export default function RegisterPage() {
                           </div>
                         </div>
                       </div>
+
+                      <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div className="form-group">
+                          <label className="control-label sr-only" />
+                          <div className="login-input">
+                            <input
+                              name="subscribedToNewsletter"
+                              type="checkbox"
+                            />
+                            &nbsp; Subscribe to newsletter ?
+                          </div>
+                        </div>
+                        <br />
+                      </div>
+
                       <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 mb20 ">
                         <button className="btn btn-primary btn-block mb10">
                           Register
